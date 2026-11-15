@@ -202,43 +202,73 @@
     }
   }
 
-  /* ----------------------------------------------------------------------
-     6. Contact form — honest, no fake sending
-     ---------------------------------------------------------------------- */
   
-var form = $("#contactForm");
-var status = $("#formStatus");
+  /* ----------------------------------------------------------------------
+     6. Contact form — AJAX submission (no redirect)
+     ---------------------------------------------------------------------- */
 
-if (form && status) {
-  form.addEventListener("submit", function (e) {
-    var name = form.elements.name;
-    var email = form.elements.email;
-    var message = form.elements.message;
+  var form = $("#contactForm");
+  var status = $("#formStatus");
 
-    status.classList.remove("is-error");
-
-    if (
-      !name.value.trim() ||
-      !email.value.trim() ||
-      !message.value.trim()
-    ) {
+  if (form && status) {
+    form.addEventListener("submit", async function (e) {
       e.preventDefault();
-      status.textContent = "Please fill in all fields.";
-      status.classList.add("is-visible", "is-error");
-      return;
-    }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
-      e.preventDefault();
-      status.textContent = "Please enter a valid email address.";
-      status.classList.add("is-visible", "is-error");
-      return;
-    }
+      var name = form.elements.name;
+      var email = form.elements.email;
+      var message = form.elements.message;
+      var submitButton = form.querySelector('button[type="submit"]');
 
-    status.textContent = "Sending your message...";
-    status.classList.add("is-visible");
-  });
-}
+      status.classList.remove("is-error");
+
+      if (
+        !name.value.trim() ||
+        !email.value.trim() ||
+        !message.value.trim()
+      ) {
+        status.textContent = "Please fill in all fields.";
+        status.classList.add("is-visible", "is-error");
+        return;
+      }
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+        status.textContent = "Please enter a valid email address.";
+        status.classList.add("is-visible", "is-error");
+        return;
+      }
+
+      if (submitButton) submitButton.disabled = true;
+
+      status.textContent = "Sending your message...";
+      status.classList.add("is-visible");
+
+      try {
+        var response = await fetch(form.action, {
+          method: "POST",
+          body: new FormData(form),
+          headers: {
+            "Accept": "application/json"
+          }
+        });
+
+        if (response.ok) {
+          status.textContent = "Message sent successfully! Thank you.";
+          status.classList.remove("is-error");
+          form.reset();
+        } else {
+          status.textContent = "Unable to send your message. Please try again.";
+          status.classList.add("is-error");
+        }
+      } catch (error) {
+        status.textContent = "Network error. Please check your internet and try again.";
+        status.classList.add("is-error");
+      } finally {
+        if (submitButton) submitButton.disabled = false;
+      }
+    });
+  }
+
+
 
 
   /* ----------------------------------------------------------------------
