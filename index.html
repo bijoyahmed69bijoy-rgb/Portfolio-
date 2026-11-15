@@ -415,28 +415,58 @@
             </div>
           </div>
 
-          <form class="glass contact__form reveal" id="contactForm" novalidate>
-            <div class="field">
-              <label for="name">Name</label>
-              <input id="name" name="name" type="text" autocomplete="name" placeholder="Your name" required />
-            </div>
-            <div class="field">
-              <label for="email">Email</label>
-              <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required />
-            </div>
-            <div class="field">
-              <label for="message">Message</label>
-              <textarea id="message" name="message" rows="5" placeholder="Tell me what you're thinking about…" required></textarea>
-            </div>
-            <button class="btn btn--primary btn--block" type="submit">
-              Send Message <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
-            </button>
-            <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
-            <p class="form-hint">
-              This form is a front-end demo and does not send anything yet. To receive messages, connect it to a
-              service such as Formspree or Netlify Forms — instructions are in <code>README.md</code>.
-            </p>
-          </form>
+          
+<form
+  class="glass contact__form reveal"
+  id="contactForm"
+  action="https://formspree.io/f/myewegdj"
+  method="POST"
+>
+  <div class="field">
+    <label for="name">Name</label>
+    <input
+      id="name"
+      name="name"
+      type="text"
+      autocomplete="name"
+      required
+    >
+  </div>
+
+  <div class="field">
+    <label for="email">Email</label>
+    <input
+      id="email"
+      name="email"
+      type="email"
+      autocomplete="email"
+      required
+    >
+  </div>
+
+  <div class="field">
+    <label for="message">Message</label>
+    <textarea
+      id="message"
+      name="message"
+      rows="5"
+      placeholder="Write your message..."
+      required
+    ></textarea>
+  </div>
+
+  <button class="btn btn--primary btn--block" type="submit">
+    Send Message
+    <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+  </button>
+
+  <p class="form-status" id="formStatus" role="status"></p>
+
+  <p class="form-hint">
+    Your message will be delivered securely through Formspree.
+  </p>
+</form>
+
         </div>
       </div>
     </section>

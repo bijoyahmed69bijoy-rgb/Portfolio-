@@ -205,38 +205,41 @@
   /* ----------------------------------------------------------------------
      6. Contact form — honest, no fake sending
      ---------------------------------------------------------------------- */
-  var form = $("#contactForm");
-  var status = $("#formStatus");
+  
+var form = $("#contactForm");
+var status = $("#formStatus");
 
-  if (form && status) {
-    form.addEventListener("submit", function (e) {
+if (form && status) {
+  form.addEventListener("submit", function (e) {
+    var name = form.elements.name;
+    var email = form.elements.email;
+    var message = form.elements.message;
+
+    status.classList.remove("is-error");
+
+    if (
+      !name.value.trim() ||
+      !email.value.trim() ||
+      !message.value.trim()
+    ) {
       e.preventDefault();
+      status.textContent = "Please fill in all fields.";
+      status.classList.add("is-visible", "is-error");
+      return;
+    }
 
-      var name = form.elements.name;
-      var email = form.elements.email;
-      var message = form.elements.message;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+      e.preventDefault();
+      status.textContent = "Please enter a valid email address.";
+      status.classList.add("is-visible", "is-error");
+      return;
+    }
 
-      status.classList.remove("is-error");
+    status.textContent = "Sending your message...";
+    status.classList.add("is-visible");
+  });
+}
 
-      if (!name.value.trim() || !email.value.trim() || !message.value.trim()) {
-        status.textContent = "Please fill in your name, email and message.";
-        status.classList.add("is-visible", "is-error");
-        return;
-      }
-
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
-        status.textContent = "That email address doesn't look right — please check it.";
-        status.classList.add("is-visible", "is-error");
-        return;
-      }
-
-      status.textContent =
-        "Thanks for writing! This form is a front-end demo, so nothing was sent. " +
-        "Connect it to a form service (see README.md) or reach me through the social links.";
-      status.classList.add("is-visible");
-      form.reset();
-    });
-  }
 
   /* ----------------------------------------------------------------------
      7. Anchor links: close menu, respect sticky nav offset
